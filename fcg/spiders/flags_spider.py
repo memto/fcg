@@ -11,7 +11,8 @@ class FlagsSpider(scrapy.Spider):
     start_urls = ['http://flagpedia.net/index']
 
     def parse(self, response):
-        for link in response.xpath('//td/a')[:1]:
+        # for link in response.xpath('//td/a')[:1]:
+        for link in response.xpath('//td/a'):
             yield response.follow(link, self.parse_page)
 
     def parse_page(self, response):
@@ -27,6 +28,6 @@ class FlagsSpider(scrapy.Spider):
         terms = main_info_selector.xpath('dt/text()').extract()
         descriptions = main_info_selector.xpath('dd/text()').extract()
         for term, des in zip(terms, descriptions):
-            if term in expected_info:
-                main_info.append((term, des))
+            if term.strip() in expected_info:
+                main_info.append((term.strip(), des.strip()))
         yield CountryFlag(title=title, image_urls=[image_url], main_info=main_info)

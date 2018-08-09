@@ -11,8 +11,8 @@ class FlagsSpider(scrapy.Spider):
     start_urls = ['http://flagpedia.net/index']
 
     def parse(self, response):
-        for link in response.xpath('//td[@class=\'td-country\']/a')[:4]:
-        # for link in response.xpath('//td[@class=\'td-country\']/a'):
+        # for link in response.xpath('//td[@class=\'td-country\']/a')[:4]:
+        for link in response.xpath('//td[@class=\'td-country\']/a'):
             yield response.follow(link, self.parse_page)
 
     def parse_page(self, response):
@@ -26,8 +26,14 @@ class FlagsSpider(scrapy.Spider):
                          'Population', 'Total area', 'Code']
         main_info_selector = response.xpath('//dl')[0]
         terms = main_info_selector.xpath('dt/text()').extract()
-        descriptions = main_info_selector.xpath('dd/text()').extract()
-        for term, des in zip(terms, descriptions):
+        descriptions_selector = main_info_selector.xpath('dd')
+        for term, des_sel in zip(terms, descriptions_selector):
             if term.strip() in expected_info:
-                main_info.append((term.strip(), des.strip()))
-        yield CountryFlag(title=title, image_urls=[image_url], main_info=main_info)
+                # some description dont have text() so here need match for
+                # text() or first-child's text then extract_first()
+                main_info.append((term.strip(), des_sel.xpath(
+                    'text()|*[1]/text()').extract_first().strip()))
+
+        main_info = dict(main_info)
+        iso_alpha2_country_code = {main_info['Code']: main_info['Country']}
+        yield CountryFlag(title=title, image_urls=[image_url], main_info=main_info, iso_alpha2_country_code=iso_alpha2_country_code)

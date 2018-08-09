@@ -94,3 +94,11 @@ IMAGES_STORE = os.path.join(PROJECT_ROOT, 'output', 'images')
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+
+# FEED_URI = 'stdout:'
+FEED_URI = 'file://' + \
+    os.path.join(PROJECT_ROOT, 'output', 'iso_alpha2_country_code.jl')
+FEED_FORMAT = 'jsonlines'
+FEED_EXPORT_FIELDS = ['iso_alpha2_country_code']
+FEED_EXPORT_INDENT = 2

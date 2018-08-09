@@ -11,8 +11,8 @@ class FlagsSpider(scrapy.Spider):
     start_urls = ['http://flagpedia.net/index']
 
     def parse(self, response):
-        # for link in response.xpath('//td/a')[:1]:
-        for link in response.xpath('//td/a'):
+        for link in response.xpath('//td[@class=\'td-country\']/a')[:4]:
+        # for link in response.xpath('//td[@class=\'td-country\']/a'):
             yield response.follow(link, self.parse_page)
 
     def parse_page(self, response):

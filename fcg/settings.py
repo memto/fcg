@@ -69,6 +69,7 @@ ROBOTSTXT_OBEY = True
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'fcg.pipelines.MyImagesPipeline': 1,
+    'fcg.pipelines.TranslatePipeline': 2,
     'fcg.pipelines.FcgPipeline': 300,
 }
 

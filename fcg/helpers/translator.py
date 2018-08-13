@@ -1,7 +1,13 @@
 from googletrans import Translator
 from googletrans.constants import LANGUAGES
 
-from constants import ISO_ALPHA2_COUNTRY_CODES, COUNTRY_CODE_TO_LANG
+if __name__ == '__main__':
+    import sys
+    import os
+    sys.path.insert(0, os.path.join(
+        os.path.abspath(os.path.dirname(__file__)), '../..'))
+
+from fcg.helpers.constants import ISO_ALPHA2_COUNTRY_CODES, COUNTRY_CODE_TO_LANG
 
 __ORIGIN_TEXT = ['hello', 'thanks', 'the love', 'peace']
 translator = Translator()

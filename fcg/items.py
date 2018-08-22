@@ -12,5 +12,7 @@ class CountryFlag(scrapy.Item):
     title = scrapy.Field()
     image_urls = scrapy.Field()
     image_paths = scrapy.Field()
-    main_info = scrapy.Field()
     iso_alpha2_country_code = scrapy.Field()
+    iso_6391_lang_code = scrapy.Field()
+    translated_texts = scrapy.Field()    
+    main_info = scrapy.Field()

@@ -38,6 +38,8 @@ class TranslatePipeline(object):
             translations = get_translated_by_lang('en')
             for translation in translations:
                 print(translation.origin, ' -> ', translation.text)
+        
+        return item
 
 
 class FcgPipeline(object):

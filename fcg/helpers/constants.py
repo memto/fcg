@@ -1,3 +1,5 @@
+ORIGIN_TEXT = ['hello', 'thanks', 'the love', 'peace']
+
 ISO_ALPHA2_COUNTRY_CODES = {
     "AF": "Afghanistan",
     "BO": "Bolivia",

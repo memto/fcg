@@ -1,4 +1,5 @@
-ORIGIN_TEXT = ['hello', 'thanks', 'the love', 'peace']
+ORIGIN_TEXT = ['hello', 'thanks', 'the love', 'peace', 'responsibility',
+               'discipline', 'calm', 'balance', 'modest', 'happiness', 'patience', 'perseverance']
 
 ISO_ALPHA2_COUNTRY_CODES = {
     "AF": "Afghanistan",

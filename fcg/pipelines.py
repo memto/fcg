@@ -57,8 +57,9 @@ class FcgPipeline(object):
     __page_count = 0
     __page = None
 
+    __random_str = str(random.randrange(1000))
     __fcg_tmp_dir = os.path.join(tempfile.gettempdir(), 'fcg')    
-    __unziped_templace_dir = os.path.join(__fcg_tmp_dir, 'template' + str(random.randrange(1000)))
+    __unziped_templace_dir = os.path.join(__fcg_tmp_dir, 'template' + __random_str)
     __unziped_templace_pictures_dir = os.path.join(
         __unziped_templace_dir, 'Pictures')
     __unziped_template_content_file = os.path.join(
@@ -148,7 +149,7 @@ class FcgPipeline(object):
 
         cwd = os.getcwd()
         os.chdir(self.__unziped_templace_dir)
-        output_file = os.path.join(self.project_root, "output", "output.odt")
+        output_file = os.path.join(self.project_root, "output", "output{}.odt".format(self.__random_str))
         subprocess.run('zip -r {} *'.format(output_file),
                        shell=True, stdout=subprocess.DEVNULL)
         os.chdir(cwd)

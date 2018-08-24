@@ -9,6 +9,7 @@ import os
 import subprocess
 import tempfile
 import shutil
+import random
 
 import scrapy
 from scrapy.pipelines.images import ImagesPipeline
@@ -55,8 +56,9 @@ class TranslatePipeline(object):
 class FcgPipeline(object):
     __page_count = 0
     __page = None
-    __unziped_templace_dir = os.path.join(
-        tempfile.gettempdir(), 'fcg', 'template')
+
+    __fcg_tmp_dir = os.path.join(tempfile.gettempdir(), 'fcg')    
+    __unziped_templace_dir = os.path.join(__fcg_tmp_dir, 'template' + str(random.randrange(1000)))
     __unziped_templace_pictures_dir = os.path.join(
         __unziped_templace_dir, 'Pictures')
     __unziped_template_content_file = os.path.join(
@@ -67,7 +69,6 @@ class FcgPipeline(object):
         self.project_root = os.path.realpath(spider.settings.get('PROJECT_ROOT'))
         self.images_store = os.path.realpath(spider.settings.get('IMAGES_STORE'))
 
-        shutil.rmtree(self.__unziped_templace_dir, ignore_errors=True)
         os.makedirs(self.__unziped_templace_dir, exist_ok=True)
         template_file = os.path.join(self.project_root, "fcg", "templates", "template.odt")
         subprocess.run(["unzip", template_file, "-d",
@@ -152,3 +153,5 @@ class FcgPipeline(object):
         subprocess.run('zip -r {} *'.format(output_file),
                        shell=True, stdout=subprocess.DEVNULL)
         os.chdir(cwd)
+
+        shutil.rmtree(self.__unziped_templace_dir, ignore_errors=True)

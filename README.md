@@ -25,3 +25,6 @@ There will be an *output.odt* file created under *<project_root>/output* folder.
 
 ##### Sample Output
 ![Sample](samples/sample1.png)
+
+##### Full pre-generated PDF file
+[Flags flashcards full](samples/flashcards_full.pdf)

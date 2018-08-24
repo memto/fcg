@@ -122,16 +122,15 @@ class FcgPipeline(object):
             self.__page_count += 1
 
         if self.__page:
-            place_holder_count = self.__page.count(
-                templates.FRONT_CEL_PLACEHOLDER)
-            if place_holder_count:
-                self.__page = self.__page.replace(
-                    templates.FRONT_CEL_PLACEHOLDER, front_cel, 1)
-                self.__page = self.__page.replace(
-                    templates.BACK_CEL_PLACEHOLDER, back_cel, 1)
-                place_holder_count -= 1
+            card_placeholder_count = self.__page.count(
+                templates.CARD_CEL_PLACEHOLDER_MARKER)
+            if card_placeholder_count:
+                card_placeholder = templates.CARD_CEL_PLACEHOLDER_FMT.format(cardIndex=card_placeholder_count//2)
+                self.__page = self.__page.replace(card_placeholder, front_cel, 1)
+                self.__page = self.__page.replace(card_placeholder, back_cel, 1)
+                card_placeholder_count -= 2
 
-            if place_holder_count == 0:
+            if card_placeholder_count == 0:
                 self.__unziped_template_content = self.__unziped_template_content.replace(
                     templates.PAGE_PLACEHOLDER, self.__page + templates.PAGE_PLACEHOLDER)
                 with open(self.__unziped_template_content_file, 'w') as content_file:

@@ -1,6 +1,7 @@
 PAGE_PLACEHOLDER = """<!-- PAGE_PLACEHOLDER -->"""
-FRONT_CEL_PLACEHOLDER = """<!-- FRONT_CEL_PLACEHOLDER -->"""
-BACK_CEL_PLACEHOLDER = """<!-- BACK_CEL_PLACEHOLDER -->"""
+CARD_CEL_PLACEHOLDER_MARKER = """CARD_CEL_PLACEHOLDER"""
+CARD_CEL_PLACEHOLDER_FMT = """<!-- {}{}-->""".format(
+    CARD_CEL_PLACEHOLDER_MARKER, '{cardIndex} ')
 
 PAGE_TMP_PLACEHOLDER = """         <table:table table:name="{frontTableName}" table:style-name="Table1">
             <table:table-column table:style-name="Table1.A" />
@@ -8,24 +9,24 @@ PAGE_TMP_PLACEHOLDER = """         <table:table table:name="{frontTableName}" ta
             <table:table-row table:style-name="Table1.1">
                <table:table-cell table:style-name="Table1.A1" office:value-type="string">
                   <text:p text:style-name="Table_20_Contents">
-                     <!-- FRONT_CEL_PLACEHOLDER -->
+                     <!-- CARD_CEL_PLACEHOLDER4 -->
                   </text:p>
                </table:table-cell>
                <table:table-cell table:style-name="Table1.B1" office:value-type="string">
                   <text:p text:style-name="Table_20_Contents">
-                     <!-- FRONT_CEL_PLACEHOLDER -->
+                     <!-- CARD_CEL_PLACEHOLDER3 -->
                   </text:p>
                </table:table-cell>
             </table:table-row>
             <table:table-row table:style-name="Table1.1">
                <table:table-cell table:style-name="Table1.A2" office:value-type="string">
                   <text:p text:style-name="Table_20_Contents">
-                     <!-- FRONT_CEL_PLACEHOLDER -->
+                     <!-- CARD_CEL_PLACEHOLDER2 -->
                   </text:p>
                </table:table-cell>
                <table:table-cell table:style-name="Table1.B2" office:value-type="string">
                   <text:p text:style-name="Table_20_Contents">
-                     <!-- FRONT_CEL_PLACEHOLDER -->
+                     <!-- CARD_CEL_PLACEHOLDER1 -->
                   </text:p>
                </table:table-cell>
             </table:table-row>
@@ -37,21 +38,21 @@ PAGE_TMP_PLACEHOLDER = """         <table:table table:name="{frontTableName}" ta
             <text:soft-page-break />
             <table:table-row table:style-name="Table2.1">
                <table:table-cell table:style-name="Table2.A1" office:value-type="string">
-                  <!-- BACK_CEL_PLACEHOLDER -->                  
+                  <!-- CARD_CEL_PLACEHOLDER3 -->                  
                   <text:p text:style-name="Table_20_Contents" />
                </table:table-cell>
                <table:table-cell table:style-name="Table2.B1" office:value-type="string">
-                  <!-- BACK_CEL_PLACEHOLDER -->                  
+                  <!-- CARD_CEL_PLACEHOLDER4 -->                  
                   <text:p text:style-name="Table_20_Contents" />
                </table:table-cell>
             </table:table-row>
             <table:table-row table:style-name="Table2.1">
                <table:table-cell table:style-name="Table2.A2" office:value-type="string">
-                  <!-- BACK_CEL_PLACEHOLDER -->                  
+                  <!-- CARD_CEL_PLACEHOLDER1 -->                  
                   <text:p text:style-name="Table_20_Contents" />
                </table:table-cell>
                <table:table-cell table:style-name="Table2.B2" office:value-type="string">
-                  <!-- BACK_CEL_PLACEHOLDER -->                  
+                  <!-- CARD_CEL_PLACEHOLDER2 -->                  
                   <text:p text:style-name="Table_20_Contents" />
                </table:table-cell>
             </table:table-row>

@@ -1,0 +1,10 @@
+{% if site.db.ads.provider and page.ads != false %}
+
+{% case site.db.ads.provider %}
+{% when "adsense" %}
+  {% include ads-providers/adsense %}
+{% when "custom" %}
+  {% include custom/ads %}
+{% endcase %}
+
+{% endif %}

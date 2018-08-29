@@ -1,0 +1,91 @@
+theme: jekyll-theme-architect
+
+markdown: kramdown
+
+plugins:
+  - jekyll-seo-tag
+
+# Permalinks
+#
+# Use of `relative_permalinks` ensures post links from the index work properly.
+permalink:           pretty
+#relative_permalinks: true
+
+# Setup
+title:               Flashcards generator
+tagline:             A small gift for my son's first birthday
+url:                 https://memto.github.io/fcg
+paginate:            5
+baseurl:             /fcg
+
+gems: [jekyll-gist, jekyll-paginate]
+
+excerpt_separator:   <!--more-->
+
+prose:
+  siteurl: 'https://memto.github.io/fcg'
+  media: 'media'
+  ignore:
+    - /downloads
+    - /public
+    - /tags
+    - /media
+    - /.sass-cache
+    - /.gitignore
+    - /404.html
+    - /LICENSE*
+    - /atom.xml
+  metadata:
+      _posts:
+        - name: "title"
+          field:
+            element: "text"
+            label: "Title"
+            value: ""
+        - name: "layout"
+          field:
+            element: "hidden"
+            value: "post"
+        - name: "ads"
+          field:
+            element: "checkbox"
+            label: "Advertising"
+            value: "true"
+        - name: "comments"
+          field:
+            element: "checkbox"
+            label: "Comments"
+            value: "true"
+            
+
+# Assets
+#
+# We specify the directory for Jekyll so we can use @imports.
+sass:
+  sass_dir:          _sass
+  style:            :compressed
+
+# About/contact
+author:
+  name:              dvn0zzz
+  email:             dvn0zzz@gmail.com
+
+# Custom vars
+version:             2.0.0
+github:
+  repo:              https://github.com/memto/fcg
+
+# specific configurations
+db:
+  comments:
+    provider: disqus
+    disqus:
+      short_name: memto
+
+  ads:
+    provider: adsense
+
+  # analytics:
+  #   provider: google
+  #   google:
+  #     tracking_id: 'UA-87741523-1'

@@ -19,7 +19,7 @@ NEWSPIDER_MODULE = 'fcg.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'fcg (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True

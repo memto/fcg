@@ -2,6 +2,7 @@ import scrapy
 
 from fcg.items import CountryFlag
 
+from fcg.helpers.constants import COUNTRIES_RANKINGS_BY_EDU
 
 class FlagsSpider(scrapy.Spider):
     name = "flags"
@@ -13,7 +14,22 @@ class FlagsSpider(scrapy.Spider):
     def parse(self, response):
         # yield scrapy.Request(url='http://flagpedia.net/south-korea', callback=self.parse_page)
         # for link in response.xpath('//td[@class=\'td-country\']/a')[:6]:
+
+        ranked_countries = {}
         for link in response.xpath('//td[@class=\'td-country\']/a'):
+            pass
+            country = link.xpath('text()').extract_first()
+            country = country.lower()
+            if 'china' in country:
+                country = 'china'
+
+            if country in COUNTRIES_RANKINGS_BY_EDU:
+                country_rank = COUNTRIES_RANKINGS_BY_EDU[country]
+                ranked_countries[country_rank] = link
+
+        sorted_ranks = sorted(ranked_countries)
+        for rank in sorted_ranks:
+            link = ranked_countries[rank]
             yield response.follow(link, self.parse_page)
 
     def parse_page(self, response):

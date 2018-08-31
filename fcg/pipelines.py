@@ -91,7 +91,7 @@ class FcgPipeline(object):
             iso_6391_lang_code.items())[0]
         translated_texts = item['translated_texts']
         main_info = item['main_info']
-        meta_data = '{}, {}, {}, {} ({}-{}, {}, {})'.format(
+        meta_data = '{} / {} / {} / {} ({}-{}, {}, {})'.format(
             main_info['Capital city'], main_info['Population'], main_info['Total area'], main_info['GDP'],
             country_code, country_lang, main_info['Calling code'], main_info['Internet TLD']
         )

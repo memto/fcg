@@ -53,4 +53,11 @@ class FlagsSpider(scrapy.Spider):
 
         main_info = dict(main_info)
         iso_alpha2_country_code = {main_info['Code']: main_info['Country']}
+        name = main_info['Country'].lower()
+        if 'united' in name or 'republic' in name or name == 'netherlands' or name == 'philippines':
+            name = 'the ' + name
+        if 'china' in name:
+            name = 'china'
+        main_info['Edu rank'] = COUNTRIES_RANKINGS_BY_EDU[name]
+
         yield CountryFlag(title=title, image_urls=[image_url], main_info=main_info, iso_alpha2_country_code=iso_alpha2_country_code)

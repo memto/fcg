@@ -28,9 +28,9 @@ class FlagsSpider(scrapy.Spider):
                 ranked_countries[country_rank] = link
 
         sorted_ranks = sorted(ranked_countries)
-        for rank in sorted_ranks:
+        for rank in sorted_ranks[:4]:
             link = ranked_countries[rank]
-            yield response.follow(link, self.parse_page)
+            yield response.follow(link, self.parse_page, meta={'Edu rank': rank})
 
     def parse_page(self, response):
         title = response.xpath('//article/h1/text()')[0].extract()
@@ -53,11 +53,5 @@ class FlagsSpider(scrapy.Spider):
 
         main_info = dict(main_info)
         iso_alpha2_country_code = {main_info['Code']: main_info['Country']}
-        name = main_info['Country'].lower()
-        if 'united' in name or 'republic' in name or name == 'netherlands' or name == 'philippines':
-            name = 'the ' + name
-        if 'china' in name:
-            name = 'china'
-        main_info['Edu rank'] = COUNTRIES_RANKINGS_BY_EDU[name]
-
+        main_info['Edu rank'] = response.meta['Edu rank']
         yield CountryFlag(title=title, image_urls=[image_url], main_info=main_info, iso_alpha2_country_code=iso_alpha2_country_code)

@@ -17,7 +17,7 @@ from scrapy.exceptions import DropItem
 
 from fcg.helpers.translator import country_code_to_langs, is_supported_lang, get_translated, get_lang_name
 from fcg.templates import templates
-
+from fcg.helpers.constants import COUNTRIES_RANKINGS_BY_EDU
 
 class MyImagesPipeline(ImagesPipeline):
     def get_media_requests(self, item, info):
@@ -109,9 +109,9 @@ class FcgPipeline(object):
             iso_6391_lang_code.items())[0]
         translated_texts = item['translated_texts']
         main_info = item['main_info']
-
+        country_rank = main_info['Edu rank']
         back_cel_table_name = 'Table{}'.format(country_code)
-        header = '{} - {}'.format(country_name, country_lang_name)
+        header = '{} - {}({})'.format(country_name, country_lang_name.capitalize(), country_rank)
         meta_data = self.__gen_meta_data(country_code, country_lang, main_info)
         back_cel = self.__gen_back_cel(
             back_cel_table_name, header, translated_texts, meta_data)

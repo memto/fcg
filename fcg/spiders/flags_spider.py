@@ -20,7 +20,7 @@ class FlagsSpider(scrapy.Spider):
             pass
             country = link.xpath('text()').extract_first()
             country = country.lower()
-            if 'china' in country:
+            if 'people' in country and 'china' in country:
                 country = 'china'
 
             if country in COUNTRIES_RANKINGS_BY_EDU:
@@ -28,7 +28,8 @@ class FlagsSpider(scrapy.Spider):
                 ranked_countries[country_rank] = link
 
         sorted_ranks = sorted(ranked_countries)
-        for rank in sorted_ranks[:4]:
+        # for rank in sorted_ranks[:4]:
+        for rank in sorted_ranks:
             link = ranked_countries[rank]
             yield response.follow(link, self.parse_page, meta={'Edu rank': rank})
 

@@ -1,5 +1,4 @@
-from googletrans import Translator
-from googletrans.constants import LANGUAGES
+from translate import Translator
 
 if __name__ == '__main__':
     import sys
@@ -7,10 +6,7 @@ if __name__ == '__main__':
     sys.path.insert(0, os.path.join(
         os.path.abspath(os.path.dirname(__file__)), '../..'))
 
-from fcg.helpers.constants import ISO_ALPHA2_COUNTRY_CODES, COUNTRY_CODE_TO_LANG, ORIGIN_TEXT
-
-__translator = Translator()
-
+from fcg.helpers.constants import ISO_ALPHA2_COUNTRY_CODES, COUNTRY_CODE_TO_LANG, ORIGIN_TEXT, LANGUAGES
 
 def country_code_to_langs(country_code):
     langs = COUNTRY_CODE_TO_LANG.get(country_code, [])
@@ -29,8 +25,10 @@ def get_lang_name(lang):
 
 
 def get_translated(lang):
-    return __translator.translate(ORIGIN_TEXT, lang, src='en')
+    translator = Translator(to_lang=lang)
+    results = [translator.translate(text) for text in ORIGIN_TEXT]
 
+    return results
 
 def check_supported_country_code_and_lang():
     for country_code in ISO_ALPHA2_COUNTRY_CODES:

@@ -44,8 +44,7 @@ class TranslatePipeline(object):
                 country_lang = lang
                 break
         lang_name = get_lang_name(country_lang)
-        translations = get_translated(country_lang)
-        translated_texts = [tran.text for tran in translations]
+        translated_texts = get_translated(country_lang)
 
         item['iso_6391_lang_code'] = {country_lang: lang_name}
         item['translated_texts'] = translated_texts

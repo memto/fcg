@@ -68,9 +68,10 @@ DOWNLOAD_DELAY = 5
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'fcg.pipelines.MyImagesPipeline': 1,
-    'fcg.pipelines.TranslatePipeline': 2,
-    'fcg.pipelines.FcgPipeline': 300,
+# for country flags
+    # 'fcg.pipelines.MyImagesPipeline': 1,
+    # 'fcg.pipelines.TranslatePipeline': 2,
+    # 'fcg.pipelines.FcgPipeline': 300,
 }
 
 IMAGES_STORE = os.path.join(PROJECT_ROOT, 'output', 'images')

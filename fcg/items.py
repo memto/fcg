@@ -16,3 +16,11 @@ class CountryFlag(scrapy.Item):
     iso_6391_lang_code = scrapy.Field()
     translated_texts = scrapy.Field()    
     main_info = scrapy.Field()
+
+class CarBrand(scrapy.Item):
+    image_urls = scrapy.Field()
+    image_paths = scrapy.Field()
+
+    country = scrapy.Field()
+    name = scrapy.Field()
+    info = scrapy.Field()

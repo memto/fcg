@@ -72,6 +72,8 @@ ITEM_PIPELINES = {
     # 'fcg.pipelines.MyImagesPipeline': 1,
     # 'fcg.pipelines.TranslatePipeline': 2,
     # 'fcg.pipelines.FcgPipeline': 300,
+
+    'fcg.pipelines.CarBrandPipeline': 300,
 }
 
 IMAGES_STORE = os.path.join(PROJECT_ROOT, 'output', 'images')

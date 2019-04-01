@@ -188,3 +188,9 @@ class FcgPipeline(object):
         os.chdir(cwd)
 
         shutil.rmtree(self.__unziped_templace_dir, ignore_errors=True)
+
+
+class CarBrandPipeline(object):
+    def process_item(self, item, spider):
+        print("CarBrandPipeline: ", item['country'], item['name'], item['info'])
+        pass

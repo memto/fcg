@@ -1,8 +1,12 @@
 import scrapy
+import html2text
+
+from fcg.items import CarBrand
 
 class FlagsSpider(scrapy.Spider):
   name = "carbrands"
   start_urls = ['http://www.carlogos.org/']
+
 
   def parse(self, response):
     # for link in response.xpath('//dl[@class=\'counav\']/dd/a'):
@@ -10,28 +14,34 @@ class FlagsSpider(scrapy.Spider):
       yield response.follow(link, self.parse_country_page)
 
   def parse_country_page(self, response):
+    country = response.xpath('//div[@class=\'main-l\']/div[@class=\'title1\']/h1/text()').extract_first()
+    country = country.replace(' Car Brands', '')
     # first logo1 dl in main-l div, first a in dd 
     # for link in response.xpath('//div[@class=\'main-l\']/dl[@class=\'logo1\'][1]/dd/a[1]'):
-    for link in response.xpath('//div[@class=\'main-l\']/dl[@class=\'logo1\'][1]/dd/a[1]')[:1]:
-      yield response.follow(link, self.parse_brand_page)
+    for link in response.xpath('//div[@class=\'main-l\']/dl[@class=\'logo1\'][1]/dd/a[1]')[:4]:
+      yield response.follow(link, self.parse_brand_page, meta={'country': country})
 
   def parse_brand_page(self, response):
     image_url = response.xpath('//div[@class=\'content\']/p[1]/a/@href').extract_first()
     info_fields = ["Founded", "Founder", "Headquarters", "Slogan", "Subsidiaries", "Official Site", "Overview"]
     info_sel = response.xpath('//div[@class=\'content\']/table/tbody')
-    header = info_sel.xpath('tr[1]/th/text()').extract_first()
+    brand = info_sel.xpath('tr[1]/th/text()').extract_first().replace(' Information', '')
     field_sels = response.xpath('//div[@class=\'content\']/table/tbody/tr')[1:]
 
     brand_info = {}
     for field_sel in field_sels:
       field = field_sel.xpath('td[1]/text()').extract_first()
-      value = field_sel.xpath('td[2]/text()').extract_first()
+      for info_field in info_fields:
+        if info_field in field:
+          field = info_field
+
+      import html2text
+      converter = html2text.HTML2Text()
+      converter.ignore_links = True
+
+      value = field_sel.xpath('td[2]').extract_first()
+      value = converter.handle(value).strip('\n')
 
       brand_info[field] = value
 
-    # print(image_url)
-    # print(header)
-    # print(brand_info)
-
-    pass
-    # yield CountryFlag(title=title, image_urls=[image_url], main_info=main_info, iso_alpha2_country_code=iso_alpha2_country_code)
+    yield CarBrand(country=response.meta['country'], name=brand, image_urls=[image_url], info=brand_info)

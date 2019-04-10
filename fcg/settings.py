@@ -69,7 +69,8 @@ DOWNLOAD_DELAY = 5
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
 # for country flags
-    # 'fcg.pipelines.MyImagesPipeline': 1,
+    'fcg.pipelines.MyImagesPipeline': 1,
+    
     # 'fcg.pipelines.TranslatePipeline': 2,
     # 'fcg.pipelines.FcgPipeline': 300,
 

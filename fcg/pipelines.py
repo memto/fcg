@@ -18,6 +18,7 @@ from scrapy.exceptions import DropItem
 from fcg.helpers.translator import country_code_to_langs, is_supported_lang, get_translated, get_lang_name
 from fcg.templates import templates
 from fcg.helpers.constants import COUNTRIES_RANKINGS_BY_EDU
+from fcg.helpers.pdf_temp import PDFCarBrand
 
 class MyImagesPipeline(ImagesPipeline):
     def get_media_requests(self, item, info):
@@ -191,6 +192,35 @@ class FcgPipeline(object):
 
 
 class CarBrandPipeline(object):
+    __cur_brands = []
+    __page_rows = 3
+    __page_cols = 2
+    __num_cels = __page_rows * __page_cols
+
+    def open_spider(self, spider):
+        self.project_root = os.path.realpath(
+            spider.settings.get('PROJECT_ROOT'))
+        self.images_store = os.path.realpath(
+            spider.settings.get('IMAGES_STORE'))
+        self.pdf = PDFCarBrand("P", "Arial", 14, self.__page_rows, self.__page_cols, 2)
+        self.pdf.init_font()
+
+    def image_realpath(self, item):
+        return os.path.join(self.images_store, item['image_paths'][0])
+
     def process_item(self, item, spider):
-        print("CarBrandPipeline: ", item['country'], item['name'], item['info'])
-        pass
+        self.__cur_brands.append(item)
+        if len(self.__cur_brands) == self.__num_cels:
+            images = [self.image_realpath(item) for item in self.__cur_brands]
+            self.pdf.add_cards(images, [])
+            self.__cur_brands = []
+        return (item['country'], item['name'])
+
+    def close_spider(self, spider):
+        if self.__cur_brands:
+            images = [self.image_realpath(item) for item in self.__cur_brands]
+            self.pdf.add_cards(images, [])
+            self.__cur_brands = []
+
+        output_file = os.path.join(self.project_root, "output", "carbrand.pdf")
+        self.pdf.output(output_file, 'F')

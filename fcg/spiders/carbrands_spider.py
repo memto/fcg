@@ -17,9 +17,9 @@ class FlagsSpider(scrapy.Spider):
     country = response.xpath('//div[@class=\'main-l\']/div[@class=\'title1\']/h1/text()').extract_first()
     country = country.replace(' Car Brands', '')
     # first logo1 dl in main-l div, first a in dd 
-    for link in response.xpath('//div[@class=\'main-l\']/dl[@class=\'logo1\'][1]/dd/a[1]'):
-    # for link in response.xpath('//div[@class=\'main-l\']/dl[@class=\'logo1\'][1]/dd/a[1]')[:4]:
-      yield response.follow(link, self.parse_brand_page, meta={'country': country})
+    for idx, link in enumerate(response.xpath('//div[@class=\'main-l\']/dl[@class=\'logo1\'][1]/dd/a[1]')):
+    # for link in response.xpath('//div[@class=\'main-l\']/dl[@class=\'logo1\'][1]/dd/a[1]')[:3]:
+      yield response.follow(link, self.parse_brand_page, meta={'country': country, 'idx': idx})
 
   def parse_brand_page(self, response):
     image_url = response.xpath('//div[@class=\'content\']/p[1]/a/@href').extract_first()
@@ -46,4 +46,4 @@ class FlagsSpider(scrapy.Spider):
 
       brand_info[field] = value
 
-    yield CarBrand(country=response.meta['country'], name=brand, image_urls=[image_url], info=brand_info)
+    yield CarBrand(country=response.meta['country'], name=brand, idx=response.meta['idx'], image_urls=[image_url], info=brand_info)

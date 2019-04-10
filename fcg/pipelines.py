@@ -192,10 +192,10 @@ class FcgPipeline(object):
 
 
 class CarBrandPipeline(object):
-    __cur_brands = []
     __page_rows = 3
     __page_cols = 2
     __num_cels = __page_rows * __page_cols
+    __countries_brands = {}
 
     def open_spider(self, spider):
         self.project_root = os.path.realpath(
@@ -209,18 +209,24 @@ class CarBrandPipeline(object):
         return os.path.join(self.images_store, item['image_paths'][0])
 
     def process_item(self, item, spider):
-        self.__cur_brands.append(item)
-        if len(self.__cur_brands) == self.__num_cels:
-            images = [self.image_realpath(item) for item in self.__cur_brands]
-            self.pdf.add_cards(images, [])
-            self.__cur_brands = []
+        country_brands = self.__countries_brands.get(item['country'], [])
+        country_brands.append(item)
+        self.__countries_brands[item['country']] = country_brands
         return (item['country'], item['name'])
 
     def close_spider(self, spider):
-        if self.__cur_brands:
-            images = [self.image_realpath(item) for item in self.__cur_brands]
-            self.pdf.add_cards(images, [])
-            self.__cur_brands = []
+        for country, brands in self.__countries_brands.items():
+            brands = sorted(brands, key=lambda brand: brand['idx'])
+            cur_brands = []
+            for brand in brands:
+                cur_brands.append(brand)
+                if len(cur_brands) == self.__num_cels:
+                    images = [self.image_realpath(brand) for brand in cur_brands]
+                    self.pdf.add_cards(images, [])
+                    cur_brands = []
+            if cur_brands:
+                images = [self.image_realpath(brand) for brand in cur_brands]
+                self.pdf.add_cards(images, [])
 
-        output_file = os.path.join(self.project_root, "output", "carbrand.pdf")
+        output_file = os.path.join(self.project_root, "output", "carbrands.pdf")
         self.pdf.output(output_file, 'F')

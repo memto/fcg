@@ -16,10 +16,18 @@ class FlagsSpider(scrapy.Spider):
   def parse_country_page(self, response):
     country = response.xpath('//div[@class=\'main-l\']/div[@class=\'title1\']/h1/text()').extract_first()
     country = country.replace(' Car Brands', '')
-    # first logo1 dl in main-l div, first a in dd 
-    for idx, link in enumerate(response.xpath('//div[@class=\'main-l\']/dl[@class=\'logo1\'][1]/dd/a[1]')):
-    # for link in response.xpath('//div[@class=\'main-l\']/dl[@class=\'logo1\'][1]/dd/a[1]')[:3]:
-      yield response.follow(link, self.parse_brand_page, meta={'country': country, 'idx': idx})
+    if 'Other' in country:
+      country_sels = response.xpath('//div[@class=\'main-l\']/div[@class=\'subtitle\']')
+      brands_sels = response.xpath('//div[@class=\'main-l\']/dl[@class=\'logo1\']')
+      for country_sel, brands_sel in zip(country_sels, brands_sels):
+        country = country_sel.xpath('strong/text()').extract_first()
+        for idx, link in enumerate(brands_sel.xpath('dd/a[1]')):
+          yield response.follow(link, self.parse_brand_page, meta={'country': country, 'idx': idx})  
+    else:
+      # first logo1 dl in main-l div, first a in dd 
+      for idx, link in enumerate(response.xpath('//div[@class=\'main-l\']/dl[@class=\'logo1\'][1]/dd/a[1]')):
+      # for link in response.xpath('//div[@class=\'main-l\']/dl[@class=\'logo1\'][1]/dd/a[1]')[:3]:
+        yield response.follow(link, self.parse_brand_page, meta={'country': country, 'idx': idx})
 
   def parse_brand_page(self, response):
     image_url = response.xpath('//div[@class=\'content\']/p[1]/a/@href').extract_first()

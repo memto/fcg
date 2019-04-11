@@ -23,5 +23,4 @@ class CarBrand(scrapy.Item):
 
     country = scrapy.Field()
     name = scrapy.Field()
-    idx = scrapy.Field()
     info = scrapy.Field()

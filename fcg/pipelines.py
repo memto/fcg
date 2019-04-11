@@ -216,7 +216,7 @@ class CarBrandPipeline(object):
 
     def close_spider(self, spider):
         for country, brands in self.__countries_brands.items():
-            brands = sorted(brands, key=lambda brand: brand['idx'])
+            brands = sorted(brands, key=lambda brand: brand['info']['idx'])
             cur_brands = []
             for brand in brands:
                 cur_brands.append(brand)

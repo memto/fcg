@@ -6,7 +6,7 @@ from fcg.items import CarBrand
 class FlagsSpider(scrapy.Spider):
   name = "carbrands"
   start_urls = ['http://www.carlogos.org/']
-
+  other_countries = ['South Korea', 'Spain', 'Sweden', 'Russia', 'Brazil']
 
   def parse(self, response):
     for link in response.xpath('//dl[@class=\'counav\']/dd/a'):
@@ -21,8 +21,9 @@ class FlagsSpider(scrapy.Spider):
       brands_sels = response.xpath('//div[@class=\'main-l\']/dl[@class=\'logo1\']')
       for country_sel, brands_sel in zip(country_sels, brands_sels):
         country = country_sel.xpath('strong/text()').extract_first()
-        for idx, link in enumerate(brands_sel.xpath('dd/a[1]')):
-          yield response.follow(link, self.parse_brand_page, meta={'country': country, 'idx': idx})  
+        if country in self.other_countries:
+          for idx, link in enumerate(brands_sel.xpath('dd/a[1]')):
+            yield response.follow(link, self.parse_brand_page, meta={'country': country, 'idx': idx})
     else:
       # first logo1 dl in main-l div, first a in dd 
       for idx, link in enumerate(response.xpath('//div[@class=\'main-l\']/dl[@class=\'logo1\'][1]/dd/a[1]')):
@@ -38,7 +39,7 @@ class FlagsSpider(scrapy.Spider):
     brand = info_sel.xpath('tr[1]/th/text()').extract_first().replace(' Information', '')
     field_sels = response.xpath('//div[@class=\'content\']/table/tbody/tr')[1:]
 
-    brand_info = {}
+    brand_info = {'idx': response.meta['idx']}
     for field_sel in field_sels:
       field = field_sel.xpath('td[1]/text()').extract_first()
       for info_field in info_fields:
@@ -54,4 +55,4 @@ class FlagsSpider(scrapy.Spider):
 
       brand_info[field] = value
 
-    yield CarBrand(country=response.meta['country'], name=brand, idx=response.meta['idx'], image_urls=[image_url], info=brand_info)
+    yield CarBrand(country=response.meta['country'], name=brand, image_urls=[image_url], info=brand_info)

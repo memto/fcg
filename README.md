@@ -29,10 +29,14 @@ There will be an *output\<xxx\>.odt* file created under *\<project_root\>/output
 
 
 #### Sample Output
-- Countries' Flags sample 
+- Countries' Flags sample
 
 ![Countries' Flags sample](samples/countries_flags_sample1.png)
+
+- Car brands sample
+![Countries' Flags sample](samples/carbrands_sample1.png)
 
 
 #### Full pre-generated PDF file
 - [Countries' Flags flashcards full](samples/countries_flags_full.pdf)
+- [Car brands flashcards full](samples/carbrands_full.pdf)

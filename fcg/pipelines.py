@@ -197,6 +197,33 @@ class CarBrandPipeline(object):
     __num_cels = __page_rows * __page_cols
     __countries_brands = {}
 
+
+    @staticmethod
+    def normalize(text):
+        textx = text.split('\n')
+        textx = [textxx.strip() for textxx in textx]
+        return ', '.join(textx)
+
+    @staticmethod
+    def brand_term(brand):
+        return {
+            'country': brand['country'],
+            'name': brand['name'][:13],
+            'Founded': brand['info']['Founded'][:20],
+            'Founder': CarBrandPipeline.normalize(brand['info']['Founder']),
+        }
+
+    @staticmethod
+    def brand_terms(brands):
+        terms = [CarBrandPipeline.brand_term(brand) for brand in brands]
+
+        terms = terms + [None]*(CarBrandPipeline.__num_cels - len(terms))
+
+        for i in range(0, len(terms), 2):
+            terms[i], terms[i+1] = terms[i+1], terms[i]
+
+        return terms
+
     def open_spider(self, spider):
         self.project_root = os.path.realpath(
             spider.settings.get('PROJECT_ROOT'))
@@ -222,11 +249,11 @@ class CarBrandPipeline(object):
                 cur_brands.append(brand)
                 if len(cur_brands) == self.__num_cels:
                     images = [self.image_realpath(brand) for brand in cur_brands]
-                    self.pdf.add_cards(images, [])
+                    self.pdf.add_cards(images, CarBrandPipeline.brand_terms(cur_brands))
                     cur_brands = []
             if cur_brands:
                 images = [self.image_realpath(brand) for brand in cur_brands]
-                self.pdf.add_cards(images, [])
+                self.pdf.add_cards(images, CarBrandPipeline.brand_terms(cur_brands))
 
         output_file = os.path.join(self.project_root, "output", "carbrands.pdf")
         self.pdf.output(output_file, 'F')

@@ -25,9 +25,9 @@ class FlagsSpider(scrapy.Spider):
           for idx, link in enumerate(brands_sel.xpath('dd/a[1]')):
             yield response.follow(link, self.parse_brand_page, meta={'country': country, 'idx': idx})
     else:
-      # first logo1 dl in main-l div, first a in dd 
+      # first logo1 dl in main-l div, first a in dd
       for idx, link in enumerate(response.xpath('//div[@class=\'main-l\']/dl[@class=\'logo1\'][1]/dd/a[1]')):
-      # for link in response.xpath('//div[@class=\'main-l\']/dl[@class=\'logo1\'][1]/dd/a[1]')[:3]:
+      # for idx, link in enumerate(response.xpath('//div[@class=\'main-l\']/dl[@class=\'logo1\'][1]/dd/a[1]')[:6]):
         yield response.follow(link, self.parse_brand_page, meta={'country': country, 'idx': idx})
 
   def parse_brand_page(self, response):
@@ -36,14 +36,14 @@ class FlagsSpider(scrapy.Spider):
       image_url = response.xpath('//div[@class=\'content\']/p[1]/img/@src').extract_first()
     info_fields = ["Founded", "Founder", "Headquarters", "Slogan", "Subsidiaries", "Official Site", "Overview"]
     info_sel = response.xpath('//div[@class=\'content\']/table/tbody')
-    brand = info_sel.xpath('tr[1]/th/text()').extract_first().replace(' Information', '')
+    brand = info_sel.xpath('tr[1]/th/text()').extract_first().split(' ')[0]
     field_sels = response.xpath('//div[@class=\'content\']/table/tbody/tr')[1:]
 
     brand_info = {'idx': response.meta['idx']}
     for field_sel in field_sels:
       field = field_sel.xpath('td[1]/text()').extract_first()
       for info_field in info_fields:
-        if info_field in field:
+        if info_field.lower() in field:
           field = info_field
 
       import html2text
@@ -54,5 +54,12 @@ class FlagsSpider(scrapy.Spider):
       value = converter.handle(value).strip('\n')
 
       brand_info[field] = value
+
+
+    for info_field in info_fields:
+      if info_field not in brand_info:
+        brand_info[info_field] = 'Unknow'
+
+    print(response.meta['country'], brand, brand_info)
 
     yield CarBrand(country=response.meta['country'], name=brand, image_urls=[image_url], info=brand_info)
